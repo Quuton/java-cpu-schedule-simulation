@@ -1,2 +1,3 @@
-# java-cpu-schedule-simulation
+# Java CPU Scheduler Simulator
+
  

@@ -28,6 +28,20 @@ public class Job {
             }
         }
     }
-
+    
+    public int getRemainingTime() {
+        return executionTime - executionProgress;
+    }
     public int getStatus() {return this.jobStatus;}
+
+    public Job clone() {
+        try {
+            return (Job) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // This exception will be thrown if the class does not implement Cloneable
+            // or if a subclass overrides clone() method and does not call super.clone()
+            // handle the exception as per your requirements
+            return null;
+        }
+    }
 }

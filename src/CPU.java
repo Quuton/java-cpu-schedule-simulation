@@ -5,7 +5,7 @@ public class CPU {
     public Job currentJob;
     public int currentState = CPU.IDLE;
     
-    public Job returnJob() {
+    public Job removeJob() {
         Job temp = this.currentJob;
         this.currentJob = null;
         this.currentState = CPU.IDLE;

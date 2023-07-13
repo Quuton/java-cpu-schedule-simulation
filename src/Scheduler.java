@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 public class Scheduler {
     public ArrayList<Job> jobPool = new ArrayList<Job>();
+    public CPU cpu = new CPU();
+    public int currentTime = 0;
 
     public ArrayList<Job> getPendingJobs() {
         ArrayList<Job> pending = new ArrayList<Job>();
@@ -18,7 +20,7 @@ public class Scheduler {
         this.jobPool.add(job);
     }
 
-    public Job getShortestJob() throws Exception{
+    public Job getShortestJob() throws Exception{ 
         if (this.jobPool.size() == 0) {
             throw new Exception();
         } else if (this.jobPool.size() == 1) {
@@ -33,9 +35,13 @@ public class Scheduler {
             }
             return minimum;
         }
+    }
 
-
-
+    public void stepTime() {
+        if (this.cpu.processCurrentJob() == Job.FINISHED) {
+            this.cpu.removeJob();
+        }
+        this.currentTime++;
     }
 
 

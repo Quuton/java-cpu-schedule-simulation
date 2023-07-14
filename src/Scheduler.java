@@ -20,15 +20,14 @@ public class Scheduler {
         this.jobPool.add(job);
     }
 
-    public Job getShortestJob() throws Exception{ 
-        if (this.jobPool.size() == 0) {
-            throw new Exception();
-        } else if (this.jobPool.size() == 1) {
-            return this.jobPool.get(0);
+    public Job getShortestJob() { 
+        ArrayList<Job> pending = getPendingJobs();
+        if (pending.size() == 1) {
+            return pending.get(0);
         } else {
 
-            Job minimum = this.jobPool.get(0);
-            for (Job job : this.jobPool) {
+            Job minimum = pending.get(0);
+            for (Job job : pending) {
                 if (minimum.getRemainingTime() > job.getRemainingTime()) {
                     minimum = job;
                 }
@@ -38,12 +37,39 @@ public class Scheduler {
     }
 
     public void stepTime() {
-        if (this.cpu.processCurrentJob() == Job.FINISHED) {
+        
+        if (this.cpu.getJob() == null) {
+            this.cpu.giveJob(getShortestJob());
+        } else if (this.cpu.getJob().getRemainingTime() > getShortestJob().getRemainingTime()) {
+            this.cpu.giveJob(getShortestJob());
+        }
+
+        this.cpu.processCurrentJob();
+        if (this.cpu.getJob().getStatus() == Job.FINISHED) {
             this.cpu.removeJob();
         }
+
         this.currentTime++;
     }
 
+    public void printStatus() {
+        System.out.format("Current Time: %d \n", this.currentTime);
+        System.out.format("CPU Status: %d \n", this.cpu.getState());
+        if (this.cpu.getJob() == null) {
+            System.out.format("CPU JobID: None \n");
+        } else {
+            System.out.format("CPU JobID: %d \n", this.cpu.getJob().getJobId());
+        }
+        for (Job job : jobPool) {
+            System.out.format("JOB ID #%d \n", job.getJobId());
+            System.out.format("JOB Status %d \n", job.getStatus());
+            System.out.format("JOB Remaining Time %d \n", job.getRemainingTime());
+        }
 
+    }
+
+    public ArrayList<Job> getJobPool() {
+        return this.jobPool;
+    }
 
 }

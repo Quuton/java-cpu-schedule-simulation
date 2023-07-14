@@ -2,7 +2,7 @@ public class CPU {
     public static final int IDLE = 0;
     public static final int BUSY = 1;
 
-    public Job currentJob;
+    public Job currentJob = null;
     public int currentState = CPU.IDLE;
     
     public Job removeJob() {
@@ -16,10 +16,18 @@ public class CPU {
         this.currentJob = job;
     }
 
-    public int processCurrentJob() {
-        this.currentState = CPU.BUSY;
-        this.currentJob.execute();
-        return this.currentJob.getStatus();
+    public Job getJob() {
+        return this.currentJob;
+    }
+
+    public void processCurrentJob() {
+        if (this.getJob() != null) {
+            this.currentState = CPU.BUSY;
+            this.currentJob.execute();
+        }
     } 
     
+    public int getState() {
+        return this.currentState;
+    }
 }

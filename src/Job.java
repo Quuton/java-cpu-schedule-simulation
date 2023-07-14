@@ -11,6 +11,7 @@ public class Job {
     public int jobStatus = 0;
 
     public Job(Integer jobID, Integer arrival, Integer executionTime) {
+        this.jobID = jobID;
         if (jobID == 0) {
             this.arrival = 0;
         } else {
@@ -43,5 +44,9 @@ public class Job {
             // handle the exception as per your requirements
             return null;
         }
+    }
+
+    public int getJobId() {
+        return this.jobID;
     }
 }

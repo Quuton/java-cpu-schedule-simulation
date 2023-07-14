@@ -1,3 +1,4 @@
+package classes;
 
 
 public class Job {
@@ -48,5 +49,9 @@ public class Job {
 
     public int getJobId() {
         return this.jobID;
+    }
+
+    public int getArrivalTime() {
+        return this.arrival;
     }
 }

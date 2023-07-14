@@ -1,3 +1,4 @@
+package classes;
 import java.util.ArrayList;
 
 public class Scheduler {
@@ -9,7 +10,7 @@ public class Scheduler {
         ArrayList<Job> pending = new ArrayList<Job>();
 
         for (Job job : this.jobPool) {
-            if (job.getStatus() == Job.UNFINISHED) {
+            if (job.getStatus() == Job.UNFINISHED && job.getArrivalTime() <= this.currentTime) {
                 pending.add(job);
             }
         }
@@ -22,10 +23,12 @@ public class Scheduler {
 
     public Job getShortestJob() { 
         ArrayList<Job> pending = getPendingJobs();
-        if (pending.size() == 1) {
+
+        if (pending.size() == 0) {
+            return null;
+        } else if (pending.size() == 1) {
             return pending.get(0);
         } else {
-
             Job minimum = pending.get(0);
             for (Job job : pending) {
                 if (minimum.getRemainingTime() > job.getRemainingTime()) {
@@ -39,16 +42,20 @@ public class Scheduler {
     public void stepTime() {
         
         if (this.cpu.getJob() == null) {
-            this.cpu.giveJob(getShortestJob());
+            this.cpu.setJob(getShortestJob());
         } else if (this.cpu.getJob().getRemainingTime() > getShortestJob().getRemainingTime()) {
-            this.cpu.giveJob(getShortestJob());
+            this.cpu.setJob(getShortestJob());
         }
 
         this.cpu.processCurrentJob();
-        if (this.cpu.getJob().getStatus() == Job.FINISHED) {
-            this.cpu.removeJob();
-        }
 
+        if (this.cpu.getJob() != null) {
+            if (this.cpu.getJob().getStatus() == Job.FINISHED) {
+                this.cpu.removeJob();
+                this.cpu.setJob(getShortestJob());
+            }
+        }
+    
         this.currentTime++;
     }
 

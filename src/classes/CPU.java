@@ -1,3 +1,4 @@
+package classes;
 public class CPU {
     public static final int IDLE = 0;
     public static final int BUSY = 1;
@@ -5,14 +6,16 @@ public class CPU {
     public Job currentJob = null;
     public int currentState = CPU.IDLE;
     
-    public Job removeJob() {
-        Job temp = this.currentJob;
+    public void removeJob() {
         this.currentJob = null;
         this.currentState = CPU.IDLE;
-        return temp;
     }
 
-    public void giveJob(Job job) {
+    public void setJob(Job job) {
+        this.currentState = CPU.BUSY;
+        if (job == null) {
+            this.currentState = CPU.IDLE;
+        }
         this.currentJob = job;
     }
 
